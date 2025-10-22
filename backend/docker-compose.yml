@@ -1,0 +1,38 @@
+# backend/docker-compose.yml
+
+services:
+  db:
+    image: postgres:14-alpine
+    # container_name: todolist_db
+    container_name: todolist_db_myTodoList_container
+    restart: always
+    environment:
+    
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=default
+      # - POSTGRES_DB=todolist_db
+
+      # - POSTGRES_USER=postgres
+      # - POSTGRES_PASSWORD=mypassword1234
+      # - POSTGRES_DB=todolist_db_myTodoListDatabase
+
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      # - postgres_data:/var/lib/postgresql/data
+      - postgres_data_myTodoListVolume:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # postgres_data:
+  postgres_data_myTodoListVolume:
+
+# docker-compose up -d
+# docker-compose down -v
